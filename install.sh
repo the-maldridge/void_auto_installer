@@ -11,7 +11,7 @@ libclocale="en_us.UTF-8"
 [ -f ./config.cfg ] && echo "Reading configuration file" && source ./config.cfg
 
 # Paritition Disk
-fdisk -u -p $disk <<EOF
+fdisk $disk <<EOF
 o
 n
 p
@@ -49,12 +49,12 @@ mount "${disk}1" "${mountpoint}/boot"
 dhcpcd
 
 # Install a base system
-xbps-install -S -R $xbpsrepository -r /mnt base-system grub ed
+xbps-install -Sy -R $xbpsrepository -r /mnt base-system grub ed
 
 # Write the *real* install script
-xbps-install bind-utils ed
+xbps-install -Sy bind-utils ed
 ip_address=`ip a | grep 'inet' | grep -v ' lo' | awk '{print $2}' | sed 's/\/.*$//'`
-hostname=`dig +simple -x $ip_address`
+hostname=`dig +short -x $ip_address | sed 's/\..*$//'`
 [ -z "$hostname" ] && hostname="void-computer"
 ed -s ./chroot_install.sh <<EOF
 ,s/%HOSTNAME%/$hostname/g
@@ -73,8 +73,8 @@ chmod +x "${mountpoint}/chroot_install.sh"
 mount -t proc proc "${mountpoint}/proc"
 mount -t sysfs sys "${mountpoint}/sys"
 mount -o bind /dev "${mountpoint}/dev"
-mount -t devpts pts "${mountpoint}/pts"
+mount -t devpts pts "${mountpoint}/dev/pts"
 
 cd $mountpoint
 # Run the install tasks
-chroot $mountpoint "./chrootInstall.sh"
+chroot $mountpoint "./chroot_install.sh"
