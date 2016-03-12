@@ -65,6 +65,9 @@ ed -s ./chroot_install.sh <<EOF
 w
 EOF
 
+# Copy file and make sure it is executable
+cp ./chroot_install.sh $mountpoint
+chmod +x "${mountpoint}/chroot_install.sh"
 
 # Mount dev, bind, proc, etc into chroot
 mount -t proc proc "${mountpoint}/proc"
