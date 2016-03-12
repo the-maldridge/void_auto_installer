@@ -1,16 +1,17 @@
 #!/bin/sh
 
 bootpartitionsize="500M"
-disk="/dev/`lsblk | sed -n 2p | awk '{print $1}'`"
+disk="/dev/`lsblk | grep disk | sed -n 1p | awk '{print $1}'`"
 swapsize="`grep MemTotal /proc/meminfo | awk '{print $2}'`K";
 mountpoint="/mnt"
 xbpsrepository="http://repo3.voidlinux.eu/current"
-[ -f ./config.cfg ] || (echo "Config File Not Found" && exit 1)
-echo "Reading configuration file"
-source ./config.cfg
+timezone="America/Chicago"
+keymap="us"
+libclocale="en_us.UTF-8"
+[ -f ./config.cfg ] && echo "Reading configuration file" && source ./config.cfg
 
 # Paritition Disk
-fdisk -u -p $disk << EOF
+fdisk -u -p $disk <<EOF
 o
 n
 p
@@ -48,9 +49,21 @@ mount "${disk}1" "${mountpoint}/boot"
 dhcpcd
 
 # Install a base system
-xbps-install -S -R $xbpsrepository -r /mnt base-system grub
+xbps-install -S -R $xbpsrepository -r /mnt base-system grub ed
 
 # Write the *real* install script
+xbps-install bind-utils ed
+ip_address=`ip a | grep 'inet' | grep -v ' lo' | awk '{print $2}' | sed 's/\/.*$//'`
+hostname=`dig +simple -x $ip_address`
+[ -z "$hostname" ] && hostname="void-computer"
+ed -s ./chroot_install.sh <<EOF
+,s/%HOSTNAME%/$hostname/g
+,s/%DISK%/$disk/g
+,s/%TIMEZONE%/$timezone/g
+,s/%KEYMAP%/$keymap/g
+,s/%LIBCLOCALE%/$libclocale/g
+w
+EOF
 
 
 # Mount dev, bind, proc, etc into chroot
