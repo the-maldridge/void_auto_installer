@@ -11,6 +11,9 @@ libclocale="en_US.UTF-8"
 username="cv"
 [ -f ./config.cfg ] && echo "Reading configuration file" && source ./config.cfg
 
+# Get an IP address
+dhcpcd
+
 # Paritition Disk
 fdisk $disk <<EOF
 o
@@ -46,8 +49,6 @@ mount "${disk}3" $mountpoint
 mkdir "${mountpoint}/boot"
 mount "${disk}1" "${mountpoint}/boot"
 
-# Get an IP address
-dhcpcd
 
 # Install a base system
 xbps-install -Sy -R $xbpsrepository -r /mnt base-system grub ed
