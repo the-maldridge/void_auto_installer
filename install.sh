@@ -8,6 +8,7 @@ xbpsrepository="http://lug.utdallas.edu/mirror/void/current"
 timezone="America/Chicago"
 keymap="us"
 libclocale="en_US.UTF-8"
+username="cv"
 [ -f ./config.cfg ] && echo "Reading configuration file" && source ./config.cfg
 
 # Paritition Disk
@@ -62,6 +63,7 @@ ed -s ./chroot_install.sh <<EOF
 ,s,%TIMEZONE%,$timezone,g
 ,s/%KEYMAP%/$keymap/g
 ,s/%LIBCLOCALE%/$libclocale/g
+,s/%USERNAME%/$username/g
 w
 EOF
 

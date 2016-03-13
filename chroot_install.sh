@@ -4,6 +4,12 @@
 chown root:root /
 chmod 755 /
 
+useradd -m -s /bin/bash -U -G wheel,users,audio,video,cdrom,input %USERNAME%
+passwd %USERNAME%
+
+# Give wheel sudo
+echo "%wheel ALL=(ALL) ALL" > /etc/sudoers.d/wheel
+
 # Set the hostname
 echo "%HOSTNAME%" > /etc/hostname
 
@@ -52,3 +58,4 @@ kernel_version=`ls /lib/modules | cut -f1,2 -d'.' | uniq | sort -Vr | sed -n 1p`
 # Install grub
 grub-install %DISK%
 xbps-reconfigure -f "linux${kernel_version}"
+passwd -l root
