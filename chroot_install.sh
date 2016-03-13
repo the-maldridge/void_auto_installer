@@ -9,7 +9,7 @@ echo "%HOSTNAME%" > /etc/hostname
 
 # Fix the rc.conf file
 ed -s /etc/rc.conf <<EOF
-,s/void-live/%HOSTNAME%/
+,s_void-live_%HOSTNAME%_
 ,s,Europe/Madrid,%TIMEZONE%,
 ,s/"es"/"%KEYMAP%"
 /HOSTNAME/s/#//
