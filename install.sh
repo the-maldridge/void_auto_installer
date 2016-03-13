@@ -4,7 +4,7 @@ bootpartitionsize="500M"
 disk="/dev/`lsblk | grep disk | sed -n 1p | awk '{print $1}'`"
 swapsize="`grep MemTotal /proc/meminfo | awk '{print $2}'`K";
 mountpoint="/mnt"
-xbpsrepository="http://repo3.voidlinux.eu/current"
+xbpsrepository="http://lug.utdallas.edu/mirror/void/current"
 timezone="America/Chicago"
 keymap="us"
 libclocale="en_us.UTF-8"
@@ -36,9 +36,9 @@ q
 EOF
 
 # Make Filesystems
-mkfs.ext4 "${disk}1"
-mkfs.ext4 "${disk}3"
-mkswap "${disk}2"
+mkfs.ext4 -f "${disk}1"
+mkfs.ext4 -f "${disk}3"
+mkswap -f "${disk}2"
 
 # Mount our chroot
 mount "${disk}3" $mountpoint
