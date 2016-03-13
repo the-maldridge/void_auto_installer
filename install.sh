@@ -36,9 +36,9 @@ q
 EOF
 
 # Make Filesystems
-mkfs.ext4 "${disk}1" <<<"y"
-mkfs.ext4 "${disk}3" <<<"y"
-mkswap -f "${disk}2" <<<"y"
+mkfs.ext4 -F "${disk}1"
+mkfs.ext4 -F "${disk}3"
+mkswap -F "${disk}2"
 
 # Mount our chroot
 mount "${disk}3" $mountpoint
