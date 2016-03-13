@@ -26,7 +26,7 @@ uuid3=`blkid | grep '%DISK%3:' | awk -F '"' '{print $2}'`
 
 # Fix the fstab file
 ed -s /etc/fstab <<EOF
-/tempfs/d
+/tmpfs/d
 a
 UUID=$uuid3 / ext4 defaults,errors=remount-ro 0 1
 UUID=$uuid1 /boot ext4 defaults 0 2
@@ -50,5 +50,5 @@ echo "hostonly=yes" > /etc/dracut.conf.d/hostonly.conf
 kernel_version=`ls /lib/modules | cut -f1,2 -d'.' | uniq | sort -Vr | sed -n 1p`
 
 # Install grub
-grub-install
+grub-install %DISK%1
 xbps-reconfigure -f "linux${kernel_version}"
