@@ -50,5 +50,5 @@ echo "hostonly=yes" > /etc/dracut.conf.d/hostonly.conf
 kernel_version=`ls /lib/modules | cut -f1,2 -d'.' | uniq | sort -Vr | sed -n 1p`
 
 # Install grub
-grub-install %DISK%1
+grub-install %DISK%
 xbps-reconfigure -f "linux${kernel_version}"

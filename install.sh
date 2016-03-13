@@ -7,7 +7,7 @@ mountpoint="/mnt"
 xbpsrepository="http://lug.utdallas.edu/mirror/void/current"
 timezone="America/Chicago"
 keymap="us"
-libclocale="en_us.UTF-8"
+libclocale="en_US.UTF-8"
 [ -f ./config.cfg ] && echo "Reading configuration file" && source ./config.cfg
 
 # Paritition Disk
