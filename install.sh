@@ -57,7 +57,7 @@ ip_address=`ip a | grep 'inet' | grep -v ' lo' | awk '{print $2}' | sed 's/\/.*$
 hostname=`dig +short -x $ip_address | sed 's/\..*$//'`
 [ -z "$hostname" ] && hostname="void-computer"
 ed -s ./chroot_install.sh <<EOF
-,s_%HOSTNAME%_$hostname_g
+,s_%HOSTNAME%_${hostname}_g
 ,s,%DISK%,$disk,g
 ,s,%TIMEZONE%,$timezone,g
 ,s/%KEYMAP%/$keymap/g

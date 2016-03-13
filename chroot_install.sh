@@ -13,15 +13,16 @@ ed -s /etc/rc.conf <<EOF
 ,s,Europe/Madrid,%TIMEZONE%,
 ,s/"es"/"%KEYMAP%"
 /HOSTNAME/s/#//
+/HARDWARECLOCK/s/#//
 /TIMEZONE/s/#//
 /KEYMAP/s/#//
 w
 EOF
 
 # Grab UUIDS
-$uuid1=`blkid | grep '%DISK%1:' | awk -F '"' '{print $2}'`
-$uuid2=`blkid | grep '%DISK%2:' | awk -F '"' '{print $2}'`
-$uuid3=`blkid | grep '%DISK%3:' | awk -F '"' '{print $2}'`
+uuid1=`blkid | grep '%DISK%1:' | awk -F '"' '{print $2}'`
+uuid2=`blkid | grep '%DISK%2:' | awk -F '"' '{print $2}'`
+uuid3=`blkid | grep '%DISK%3:' | awk -F '"' '{print $2}'`
 
 # Fix the fstab file
 ed -s /etc/fstab <<EOF
