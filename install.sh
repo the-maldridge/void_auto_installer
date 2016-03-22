@@ -1,7 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 bootpartitionsize="500M"
-disk="/dev/`lsblk | grep disk | sed -n 1p | awk '{print $1}'`"
+disk=`lsblk -ipo NAME,TYPE,MOUNTPOINT | awk '{if ($2=="disk") {disks[$1]=0; last=$1} if ($3=="/") {disks[last]++}} END {for (a in disks) {if(disks[a] == 0){print a; break}}}'`
 swapsize="`grep MemTotal /proc/meminfo | awk '{print $2}'`K";
 mountpoint="/mnt"
 xbpsrepository="http://lug.utdallas.edu/mirror/void/current"
@@ -9,6 +9,21 @@ timezone="America/Chicago"
 keymap="us"
 libclocale="en_US.UTF-8"
 username="cv"
+
+while getopts "u:" opt; do
+        case $opt in
+                u)
+                        xbps-install -Sy curl
+                        curl -o config.cfg $OPTARG
+                        ;;
+                \?)
+                        echo "Invalid option: -$OPTARG" >&2
+                        exit 1
+                        ;;
+        esac
+
+done
+
 [ -f ./config.cfg ] && echo "Reading configuration file" && source ./config.cfg
 
 # Get an IP address
