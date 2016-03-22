@@ -2,7 +2,7 @@
 
 # Get an IP address
 dhcpcd -w
-sleep 5
+sleep 15
 
 bootpartitionsize="500M"
 disk=`lsblk -ipo NAME,TYPE,MOUNTPOINT | awk '{if ($2=="disk") {disks[$1]=0; last=$1} if ($3=="/") {disks[last]++}} END {for (a in disks) {if(disks[a] == 0){print a; break}}}'`
@@ -108,4 +108,4 @@ mount -t devpts pts "${mountpoint}/dev/pts"
 cd $mountpoint
 # Run the install tasks
 chroot $mountpoint "./chroot_install.sh"
-reboot
+#reboot
