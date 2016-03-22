@@ -71,6 +71,10 @@ mount_target() {
     mount "${disk}1" "${mountpoint}/boot"
 }
 
+install_xbps_keys() {
+    mkdir -p ${mountpoint}/var/db/xbps/keys
+    cp /var/db/xbps/keys/* ${mountpoint}/var/db/xbps/keys
+}
 install_base_system() {
     # Install a base system
     xbps-install -Sy -R $xbpsrepository -r /mnt base-system grub ed $pkgs
@@ -163,8 +167,7 @@ configure_autoinstall() {
 # ------------------- Install "main()" ----------------------------
 
 CURRENT_STEP=0
-STEP_COUNT=9
-
+STEP_COUNT=10
 
 welcome
 
@@ -180,6 +183,9 @@ format_disk
 
 print_step "Mounting the target filesystems"
 mount_target
+
+print_step "Install XBPS keys"
+install_xbps_keys
 
 print_step "Installing the base system"
 install_base_system
