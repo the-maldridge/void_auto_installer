@@ -106,3 +106,4 @@ mount -t devpts pts "${mountpoint}/dev/pts"
 cd $mountpoint
 # Run the install tasks
 chroot $mountpoint "./chroot_install.sh"
+reboot
