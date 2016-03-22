@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Get an IP address
+dhcpcd -w
+sleep 5
+
 bootpartitionsize="500M"
 disk=`lsblk -ipo NAME,TYPE,MOUNTPOINT | awk '{if ($2=="disk") {disks[$1]=0; last=$1} if ($3=="/") {disks[last]++}} END {for (a in disks) {if(disks[a] == 0){print a; break}}}'`
 swapsize="`grep MemTotal /proc/meminfo | awk '{print $2}'`K";
@@ -36,8 +40,6 @@ done
 
 [ -f ./config.cfg ] && echo "Reading configuration file" && source ./config.cfg
 [ -z "$disk" ] && echo "No disk found." && exit 1
-# Get an IP address
-dhcpcd
 
 # Paritition Disk
 fdisk $disk <<EOF
