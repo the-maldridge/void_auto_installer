@@ -1,5 +1,4 @@
-echo "==========================================="
-echo "======= Void Linux Auto-Installer ========="
-echo "==========================================="
-cd /opt/void-autoinstall/
-bash install.sh
+if [ "$(tty)" = "/dev/tty1" ] ; then
+    cd /opt/void-autoinstall/
+    bash install.sh
+fi
