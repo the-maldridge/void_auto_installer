@@ -10,6 +10,16 @@ keymap="us"
 libclocale="en_US.UTF-8"
 username="cv"
 
+procurl=`awk '{for(i = 1; i <= NF; i++) { split($i,a,"="); if(a[1]=="autourl"){print a[2]} }}' /proc/cmdline`
+
+if [ -z "$procurl" ]
+then
+        echo "No config url found in /proc/cmdline."
+else
+        xbps-install -Sy curl
+        curl -o config.cfg $procurl
+fi
+
 while getopts "u:" opt; do
         case $opt in
                 u)
@@ -25,7 +35,7 @@ while getopts "u:" opt; do
 done
 
 [ -f ./config.cfg ] && echo "Reading configuration file" && source ./config.cfg
-
+[ -z "$disk" ] && echo "No disk found." && exit 1
 # Get an IP address
 dhcpcd
 
@@ -66,7 +76,7 @@ mount "${disk}1" "${mountpoint}/boot"
 
 
 # Install a base system
-xbps-install -Sy -R $xbpsrepository -r /mnt base-system grub ed
+xbps-install -Sy -R $xbpsrepository -r /mnt base-system grub ed $pkgs
 
 # Write the *real* install script
 xbps-install -Sy bind-utils ed
