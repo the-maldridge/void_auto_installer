@@ -1,8 +1,14 @@
 if [ -x /sbin/agetty -o /bin/agetty ]; then
-	# util-linux specific settings
-	if [ "${tty}" = "tty1" ]; then
-		GETTY_ARGS="--noclear --autologin root"
+    if [ "${tty}" = "tty1" ]; then
+	grep -q auto /proc/cmdline
+	rc=$?
+	if [ $rc -eq 0 ] ; then
+	    GETTY_ARGS="--noclear --autologin root"
+	else
+	    # util-linux specific settings
+	    GETTY_ARGS="--noclear"
 	fi
+    fi
 fi
 
 BAUD_RATE=38400
