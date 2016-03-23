@@ -24,8 +24,13 @@ correct_permission() {
 }
 
 add_user() {
+    USERPASS=%PASSWORD%
     useradd -m -s /bin/bash -U -G wheel,users,audio,video,cdrom,input %USERNAME%
-    passwd %USERNAME%
+    if [ -z "${USERPASS}" ] ; then
+	passwd %USERNAME%
+    else
+	echo "%USERNAME%:${USERPASS}" | chpasswd -c SHA512
+    fi
 }
 
 grant_sudo() {

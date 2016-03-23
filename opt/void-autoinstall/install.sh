@@ -93,6 +93,7 @@ template_chroot_script() {
 ,s/%KEYMAP%/$keymap/g
 ,s/%LIBCLOCALE%/$libclocale/g
 ,s/%USERNAME%/$username/g
+,s/%PASSWORD%/$password/g
 w
 EOF
 }
